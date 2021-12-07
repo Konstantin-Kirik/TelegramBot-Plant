@@ -94,6 +94,6 @@ public class Employee {
         return surname + " " + name + " " + patronymic + "\n"
                 + "Табельный номер : " + personnel_number + "\n"
                 + "Год рождения : " + born + " \n"
-                + "Образование : " + education + "\n";
+                + "Образование : " + education + "\n\n";
     }
 }

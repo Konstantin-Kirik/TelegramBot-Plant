@@ -1,16 +1,23 @@
 package message;
 
 import connect.BotConnect;
-import dataBase.DataBaseRequest;
+import employeeMethod.FindForBuilding;
+import employeeMethod.SelectEmployee;
 import workmethod.Examination;
+import employeeMethod.FindEmployee;
 import workmethod.RequestsClient;
 import org.telegram.telegrambots.meta.api.objects.Message;
+
 
 public class AllSendMessage implements RequestsClient {
 
     public AllSendMessage(Message message) {
 
         BotConnect botConnect = new BotConnect();
+        Examination examination = new Examination();
+        FindEmployee findEmployee = new FindEmployee();
+        FindForBuilding findForBuilding = new FindForBuilding();
+        SelectEmployee selectEmployee = new SelectEmployee();
 
         // определяем в каких случаях есть текст
         if (!Examination.numeralOrNot(message.getText())) {
@@ -24,12 +31,19 @@ public class AllSendMessage implements RequestsClient {
                                     + KC + " Расчет состава КС\n"
                                     + KM + " Расчет состава КМ\n"
                                     + EMPLOYEE_ALL + " Работники подразделения\n"
-                                    + EMPLOYEE_INFO_ALL + " Вся информация о работниках подразделения";
+                                    + EMPLOYEE_INFO_ALL + " Вся информация о работниках подразделения\n"
+                                    + EMPLOYEE_FIND_SURNAME + " Поиск сотрудника по фамилии\n"
+                                    + EMPLOYEE_FIND_BUILDING + " Поиск сотрудников по зданиям";
                     botConnect.sendMessage(message, messageMy);
                 }
                 case HELP -> {
                     if (message.hasText()) {
-                        String messageMy = "Этот бот может посчитать формулы касающиеся здания 605(НО ЭТО ПОКА ЧТО!!!)";
+                        String messageMy = "Данный бот разработан для отдела опытного производства технологического бюра, в целях " +
+                                "упрощения и скорости работы на производстве.\n" +
+                                "Перечень возможностей бота:\n" +
+                                "- расчет навесок на составы здания 605;\n" +
+                                "- информация о работниках подразделения;\n" +
+                                "- поиск по подразделению.";
                         botConnect.sendMessage(message, messageMy);
                     }
                 }
@@ -48,14 +62,22 @@ public class AllSendMessage implements RequestsClient {
                     botConnect.sendMessage(message, mail);
                 }
                 case EMPLOYEE_ALL -> {
-                    botConnect.sendDataBaseEmployee(message, DataBaseRequest.selectEmployee());
+                    botConnect.sendDataBaseEmployee(message, selectEmployee.selectEmployee());
                 }
                 case EMPLOYEE_INFO_ALL -> {
-                    botConnect.sendDataBaseEmployeeInfo(message, DataBaseRequest.selectEmployeeInfoAll());
+                    botConnect.sendDataBaseEmployeeInfo(message, selectEmployee.selectEmployeeInfoAll());
+                }
+                case EMPLOYEE_FIND_SURNAME -> {
+                    String mail = "Поиск сотрудника по фамилии: введите 'работник=ххххх'";
+                    botConnect.sendMessage(message, mail);
+                }
+                case EMPLOYEE_FIND_BUILDING -> {
+                    String mail = "Поск сотрудников по зданию: введите 'здание=хххх'";
+                    botConnect.sendMessage(message,mail);
                 }
             }
         } else {
-            String str = Examination.sostav(message.getText());
+            String str = examination.content(message.getText());
             switch (str) {
                 case kmk -> {
                     botConnect.sendMessageString(message, Examination.parsingKMK(message.getText()));
@@ -66,9 +88,17 @@ public class AllSendMessage implements RequestsClient {
                 case km -> {
                     botConnect.sendMessageString(message, Examination.parsingKM(message.getText()));
                 }
+                case employee_find_surname -> {
+                    botConnect.sendDataBaseEmployeeInfo(message, findEmployee.selectFindEmployee(message.getText()));
+                }
+                case employee_find_building -> {
+                    botConnect.sendDataBaseEmployeeInfo(message,findForBuilding.selectFindEmployee(message.getText()));
+                }
             }
         }
     }
 }
+
+
 
 

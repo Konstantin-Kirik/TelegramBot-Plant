@@ -3,6 +3,8 @@ package workmethod;
 import java.util.ArrayList;
 import java.util.List;
 
+
+//расчет навесок для здания 605
 public class Сalculations {
 
     //расчеты компонентов для состава КМК-1

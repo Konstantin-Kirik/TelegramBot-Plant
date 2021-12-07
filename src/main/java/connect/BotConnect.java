@@ -68,6 +68,7 @@ public class BotConnect extends TelegramLongPollingBot {
         sendMessage.setChatId(String.valueOf(message.getChatId()));
         sendMessage.setReplyToMessageId(message.getMessageId());
         sendMessage.setText(String.valueOf(listEmp));
+
         try {
             execute(sendMessage);
         } catch (TelegramApiException e) {

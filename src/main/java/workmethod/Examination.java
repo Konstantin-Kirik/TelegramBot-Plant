@@ -2,7 +2,7 @@ package workmethod;
 
 import java.util.List;
 
-public class Examination {
+public class Examination implements ContentRequest {
 
     //определяем являеться message запросом или числом
     public static boolean numeralOrNot(String str) {
@@ -12,13 +12,15 @@ public class Examination {
         for (int i = 0; i < str.length(); i++) {
             if (str.charAt(i) == '/')
                 return false;
+            break;
+
         }
         return true;
     }
 
-    //проверка для какою формулу применим
-    public static String sostav(String message) {
-
+    //проверка формулу применим
+    @Override
+    public String content(String message) {
         String[] subStr = message.split("="); // Разделения строки str с помощью метода split()
         String[] result = new String[subStr.length];
         for (int i = 0; i < subStr.length; i++) {
@@ -26,6 +28,7 @@ public class Examination {
         }
         return result[0];
     }
+
 
     //парсим строку из чисел
     public static List<String> parsingKMK(String message) {
