@@ -33,8 +33,4 @@ public class Building {
         this.number = number;
     }
 
-    @Override
-    public String toString() {
-        return "Номер здание =" + number + "\n";
-    }
 }

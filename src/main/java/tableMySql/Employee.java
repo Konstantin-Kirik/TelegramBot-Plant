@@ -89,11 +89,4 @@ public class Employee {
         this.education = education;
     }
 
-    @Override
-    public String toString() {
-        return surname + " " + name + " " + patronymic + "\n"
-                + "Табельный номер : " + personnel_number + "\n"
-                + "Год рождения : " + born + " \n"
-                + "Образование : " + education + "\n\n";
-    }
 }

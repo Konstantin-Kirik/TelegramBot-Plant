@@ -1,10 +1,9 @@
-package employeeMethod;
+package employee;
 
 import dataBase.ConnectionDB;
-import dataBase.FindRequest;
 import dataBase.SqlRequests;
+import method.ContentRequest;
 import tableMySql.*;
-import workmethod.ContentRequest;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -12,14 +11,47 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FindForBuilding implements FindRequest, SqlRequests {
+public class SelectEmployee implements SqlRequests, SelectRequest, ContentRequest {
+
+    @Override
+    public String content(String message) {
+        String[] subStr = message.split("="); // Разделения строки str с помощью метода split()
+        String[] result = new String[subStr.length];
+        for (int i = 0; i < subStr.length; i++) {
+            result[i] = subStr[i].trim();
+        }
+        return result[1];
+    }
+
+    @Override
+    public List<Employee> selectEmployee() {
+        List<Employee> listEmp = new ArrayList<>();
+
+        try {
+            ConnectionDB connectionDB = new ConnectionDB();
+            Statement statement = connectionDB.getConnection().createStatement();
+            ResultSet resultSet = statement.executeQuery(EMPLOYEE);
+
+            while (resultSet.next()) {
+                Employee employee = new Employee();
+                employee.setName(resultSet.getString("name"));
+                employee.setSurname(resultSet.getString("surname"));
+                employee.setPatronymic(resultSet.getString("patronymic"));
+                employee.setPersonnel_number(resultSet.getInt("personnel_number"));
+                listEmp.add(employee);
+            }
+            resultSet.close();
+            statement.close();
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        }
+
+        return listEmp;
+    }
 
     @Override
     public List<EmpProfBuldSkil> selectFindEmployee(String message) {
-
-        FindEmployee findEmployee = new FindEmployee();
-        String number = findEmployee.content(message);
-
+        String str = content(message);
         List<EmpProfBuldSkil> listInfo = new ArrayList<>();
 
         try {
@@ -57,7 +89,13 @@ public class FindForBuilding implements FindRequest, SqlRequests {
                 skills.setLevel_skills(resultSet.getString("level_skills"));
                 skillsList.add(skills);
 
-                if (building.getNumber().equalsIgnoreCase(number)) {
+                if (employee.getSurname().equalsIgnoreCase(str)) {
+                    empProfBuldSkil.setEmployees(employeeList);
+                    empProfBuldSkil.setProfessions(professionList);
+                    empProfBuldSkil.setBuildings(buildingList);
+                    empProfBuldSkil.setSkills(skillsList);
+                    listInfo.add(empProfBuldSkil);
+                }else if (building.getNumber().equalsIgnoreCase(str)){
                     empProfBuldSkil.setEmployees(employeeList);
                     empProfBuldSkil.setProfessions(professionList);
                     empProfBuldSkil.setBuildings(buildingList);
@@ -75,3 +113,4 @@ public class FindForBuilding implements FindRequest, SqlRequests {
         return listInfo;
     }
 }
+

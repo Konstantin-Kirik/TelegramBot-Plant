@@ -51,8 +51,4 @@ public class EmpProfBuldSkil {
         this.skills = skills;
     }
 
-    @Override
-    public String toString() {
-        return employees + " " + professions + " " + buildings + " " + skills;
-    }
 }

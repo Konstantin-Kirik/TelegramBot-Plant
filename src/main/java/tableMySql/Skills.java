@@ -31,10 +31,4 @@ public class Skills {
     public void setLevel_skills(String level_skills) {
         this.level_skills = level_skills;
     }
-
-    @Override
-    public String toString() {
-        return "Навыки = " + level_skills + "\n"
-                + "------------------------------------------\n";
-    }
 }

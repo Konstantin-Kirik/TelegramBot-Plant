@@ -31,9 +31,4 @@ public class Profession {
     public void setProfession_name(String profession_name) {
         this.profession_name = profession_name;
     }
-
-    @Override
-    public String toString() {
-        return "Профессия : " + profession_name + "\n";
-    }
 }
